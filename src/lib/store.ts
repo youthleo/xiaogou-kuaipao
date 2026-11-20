@@ -1,7 +1,7 @@
 import type { PolyFeature, Pt } from './geo'
 
 export const STORAGE_KEY = 'xiaogou-kuaipao-v1'
-export const MY_COLOR = '#E5FF00'
+export const MY_COLOR = '#65A30D'
 
 export type BotId = 'ghost-night' | 'hunter-morning' | 'mad-pace'
 
