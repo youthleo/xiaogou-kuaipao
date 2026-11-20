@@ -24,8 +24,8 @@ export default defineConfig({
         lang: 'zh-CN',
         dir: 'ltr',
         categories: ['sports', 'health', 'games'],
-        theme_color: '#0A0A0A',
-        background_color: '#0A0A0A',
+        theme_color: '#F2F2EF',
+        background_color: '#F2F2EF',
         display: 'standalone',
         orientation: 'portrait',
         start_url: base,
@@ -41,9 +41,9 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/server\.arcgisonline\.com\/.*/i,
+            urlPattern: /^https:\/\/webrd0[1-4]\.is\.autonavi\.com\/.*/i,
             handler: 'CacheFirst',
-            options: { cacheName: 'esri-tiles', expiration: { maxEntries: 500, maxAgeSeconds: 7 * 24 * 3600 } },
+            options: { cacheName: 'gaode-tiles', expiration: { maxEntries: 500, maxAgeSeconds: 7 * 24 * 3600 } },
           },
         ],
       },
