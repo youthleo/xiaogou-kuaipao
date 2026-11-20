@@ -3,10 +3,11 @@ import html2canvas from 'html2canvas'
 import type { GameState } from '../lib/store'
 import { levelFor, totalDistanceM, totalMyAreaM2 } from '../lib/store'
 import { formatArea, formatDistance } from '../lib/geo'
+import { CameraIcon, DogIcon, MedalIcon, PinIcon } from './icons'
 import type { PolyFeature } from '../lib/geo'
 
 /**
- * 暗黑金卡「跑步护照」海报。
+ * 浅色「跑步护照」海报。
  *
  * 注意：海报节点内部全部用行内样式（hex / rgba），不用 Tailwind class。
  * Tailwind v4 的颜色是 oklch，html2canvas 解析不了会直接报错，
@@ -14,9 +15,9 @@ import type { PolyFeature } from '../lib/geo'
  */
 
 const YELLOW = '#E5FF00'
-const BG = '#0A0A0A'
-const CARD = '#161618'
-const MUTED = '#9CA3AF'
+const BG = '#FFFFFF'
+const CARD = '#F5F5F3'
+const MUTED = '#6B7280'
 
 function fmtDate(ts: number): string {
   const d = new Date(ts)
@@ -59,7 +60,7 @@ function MiniMap({ territories }: { territories: GameState['territories'] }) {
     return (
       <div
         style={{
-          width: W, height: H, background: '#0D0D0D', borderRadius: 12,
+          width: W, height: H, background: '#F5F5F3', borderRadius: 12,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           color: MUTED, fontSize: 13,
         }}
@@ -110,17 +111,17 @@ function MiniMap({ territories }: { territories: GameState['territories'] }) {
   for (let i = 1; i < 3; i++) grid.push({ x1: 0, y1: (H / 3) * i, x2: W, y2: (H / 3) * i })
 
   return (
-    <svg width={W} height={H} style={{ display: 'block', borderRadius: 12, background: '#0D0D0D' }}>
+    <svg width={W} height={H} style={{ display: 'block', borderRadius: 12, background: '#F5F5F3' }}>
       {grid.map((l, i) => (
-        <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke="#1F1F22" strokeWidth={1} />
+        <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke="#E5E7EB" strokeWidth={1} />
       ))}
       {polys.map((p) => (
         <polygon
           key={p.key}
           points={p.points}
-          fill={p.mine ? YELLOW : '#FF453A'}
+          fill={p.mine ? '#84CC16' : '#FF453A'}
           fillOpacity={p.mine ? 0.55 : 0.5}
-          stroke={p.mine ? YELLOW : '#FF453A'}
+          stroke={p.mine ? '#65A30D' : '#FF453A'}
           strokeWidth={1.5}
           strokeLinejoin="round"
         />
@@ -178,7 +179,7 @@ export default function PassportPoster({ state }: { state: GameState }) {
       key={label}
       style={{ background: CARD, borderRadius: 14, padding: '12px 6px', textAlign: 'center' }}
     >
-      <div style={{ fontSize: 17, fontWeight: 900, color: accent ? YELLOW : '#FFFFFF', lineHeight: 1.25 }}>
+      <div style={{ fontSize: 17, fontWeight: 900, color: accent ? '#65A30D' : '#111111', lineHeight: 1.25 }}>
         {value}
       </div>
       <div style={{ fontSize: 11, color: MUTED, marginTop: 3 }}>{label}</div>
@@ -187,18 +188,18 @@ export default function PassportPoster({ state }: { state: GameState }) {
 
   return (
     <div>
-      <h3 className="mb-2 mt-6 text-xs font-bold tracking-wider text-neutral-400">跑步护照 · 暗黑金卡</h3>
+      <h3 className="mb-2 mt-6 text-xs font-bold tracking-wider text-neutral-500">跑步护照</h3>
 
       {/* 海报卡片本体：行内样式，专供 html2canvas 截图 */}
-      <div ref={cardRef} style={{ width: 360, margin: '0 auto', background: BG, borderRadius: 22, border: `2px solid ${YELLOW}`, padding: 20, color: '#FFFFFF', fontFamily: "-apple-system, 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif" }}>
+      <div ref={cardRef} style={{ width: 360, margin: '0 auto', background: BG, borderRadius: 22, border: `2px solid ${YELLOW}`, padding: 20, color: '#111111', fontFamily: "-apple-system, 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif" }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div
             style={{
               width: 52, height: 52, borderRadius: '50%', background: YELLOW,
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, flexShrink: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
             }}
           >
-            🐶
+            <DogIcon className="h-11 w-11" />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 22, fontWeight: 900, lineHeight: 1.2 }}>小狗快跑</div>
@@ -209,7 +210,7 @@ export default function PassportPoster({ state }: { state: GameState }) {
           <div style={{ fontSize: 10, color: MUTED, textAlign: 'right', lineHeight: 1.5 }}>
             NO.
             <br />
-            <span style={{ color: '#FFFFFF', fontSize: 12, fontWeight: 700 }}>{serial}</span>
+            <span style={{ color: '#111111', fontSize: 12, fontWeight: 700 }}>{serial}</span>
           </div>
         </div>
 
@@ -220,7 +221,7 @@ export default function PassportPoster({ state }: { state: GameState }) {
               borderRadius: 999, padding: '5px 14px',
             }}
           >
-            🏅 {level.title}
+            <MedalIcon className="mr-1 inline h-4 w-4 align-[-2px]" /> {level.title}
           </span>
           <span style={{ fontSize: 12, color: MUTED }}>{level.next}</span>
         </div>
@@ -228,7 +229,7 @@ export default function PassportPoster({ state }: { state: GameState }) {
         <div style={{ marginTop: 14 }}>
           <MiniMap territories={state.territories} />
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 11, color: MUTED }}>
-            <span>📍 无锡 · 我的领地缩略图</span>
+            <span><PinIcon className="mr-0.5 inline h-3 w-3 align-[-1px]" />无锡 · 我的领地缩略图</span>
             <span>
               我的 {myCount} 块 · AI {state.territories.length - myCount} 块
             </span>
@@ -246,7 +247,7 @@ export default function PassportPoster({ state }: { state: GameState }) {
 
         <div
           style={{
-            marginTop: 16, paddingTop: 12, borderTop: '1px solid #262628',
+            marginTop: 16, paddingTop: 12, borderTop: '1px solid #E5E7EB',
             display: 'flex', justifyContent: 'space-between', fontSize: 11, color: MUTED,
           }}
         >
@@ -260,29 +261,29 @@ export default function PassportPoster({ state }: { state: GameState }) {
         disabled={generating}
         className="mt-3 w-full rounded-2xl bg-[#E5FF00] py-3 text-sm font-black text-black active:scale-[0.98] disabled:opacity-60"
       >
-        {generating ? '正在生成高清海报…' : '📸 生成战报海报（高清 PNG）'}
+        {generating ? '正在生成高清海报…' : (<><CameraIcon className="mr-1 inline h-4 w-4 align-[-2px]" />生成战报海报（高清 PNG）</>)}
       </button>
       <p className="mt-2 text-center text-xs leading-5 text-neutral-500">
         生成后会弹出预览图，手机上长按图片即可保存到相册发朋友圈；电脑上会自动下载 PNG。
       </p>
-      {err && <p className="mt-2 text-center text-xs text-red-400">生成失败：{err}</p>}
+      {err && <p className="mt-2 text-center text-xs text-red-600">生成失败：{err}</p>}
 
       {/* 海报预览弹窗：长按保存 */}
       {posterUrl && (
         <div
-          className="fixed inset-0 z-[950] flex items-end justify-center bg-black/85 p-4"
+          className="fixed inset-0 z-[950] flex items-end justify-center bg-black/50 p-4"
           onClick={() => setPosterUrl(null)}
         >
           <div
-            className="w-full max-w-[420px] rounded-3xl bg-[#161618] p-4"
+            className="w-full max-w-[420px] rounded-3xl bg-white p-4"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-center text-base font-black">你的跑步护照海报</h3>
-            <p className="mt-1 text-center text-xs text-neutral-400">长按图片保存到相册，再去朋友圈晒一下 🐶</p>
+            <p className="mt-1 text-center text-xs text-neutral-500">长按图片保存到相册，再去朋友圈晒一下 🐶</p>
             <img
               src={posterUrl}
               alt="小狗快跑跑步护照海报"
-              className="mt-3 w-full rounded-2xl ring-1 ring-[#E5FF00]/40"
+              className="mt-3 w-full rounded-2xl ring-1 ring-neutral-300"
             />
             <div className="mt-3 flex gap-2">
               <a
@@ -294,7 +295,7 @@ export default function PassportPoster({ state }: { state: GameState }) {
               </a>
               <button
                 onClick={() => setPosterUrl(null)}
-                className="h-12 flex-1 rounded-2xl bg-[#0A0A0A] text-sm font-bold ring-1 ring-neutral-700 active:scale-[0.98]"
+                className="h-12 flex-1 rounded-2xl bg-white text-sm font-bold ring-1 ring-neutral-200 active:scale-[0.98]"
               >
                 关闭
               </button>
