@@ -41,9 +41,9 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/.*\.basemaps\.cartocdn\.com\/.*/i,
+            urlPattern: /^https:\/\/server\.arcgisonline\.com\/.*/i,
             handler: 'CacheFirst',
-            options: { cacheName: 'carto-tiles', expiration: { maxEntries: 500, maxAgeSeconds: 7 * 24 * 3600 } },
+            options: { cacheName: 'esri-tiles', expiration: { maxEntries: 500, maxAgeSeconds: 7 * 24 * 3600 } },
           },
         ],
       },
