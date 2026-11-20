@@ -1,17 +1,17 @@
 @import 'tailwindcss';
 @import 'leaflet/dist/leaflet.css';
 
-:root { --bg: #0a0a0a; --card: #161618; --accent: #e5ff00; }
+:root { --bg: #f2f2ef; --card: #ffffff; --accent: #e5ff00; }
 html, body, #root { height: 100%; }
 body {
-  margin: 0; background: var(--bg); color: #fff;
+  margin: 0; background: var(--bg); color: #111111;
   font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   -webkit-tap-highlight-color: transparent; overscroll-behavior: none;
 }
-.leaflet-container { background: #0a0a0a; font-family: inherit; touch-action: pan-x pan-y; }
-.leaflet-control-attribution { background: rgba(10,10,10,0.7) !important; color: #666 !important; font-size: 9px !important; }
-.leaflet-control-attribution a { color: #888 !important; }
-.leaflet-tooltip { background: #161618 !important; border: 1px solid #333 !important; color: #fff !important; box-shadow: 0 4px 16px rgba(0,0,0,0.6) !important; }
+.leaflet-container { background: #e9e7e0; font-family: inherit; touch-action: pan-x pan-y; }
+.leaflet-control-attribution { background: rgba(255,255,255,0.85) !important; color: #666 !important; font-size: 9px !important; }
+.leaflet-control-attribution a { color: #555 !important; }
+.leaflet-tooltip { background: #ffffff !important; border: 1px solid #e5e7eb !important; color: #111111 !important; box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important; }
 .leaflet-tooltip::before { display: none; }
 .safe-top { padding-top: env(safe-area-inset-top, 0px); }
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }

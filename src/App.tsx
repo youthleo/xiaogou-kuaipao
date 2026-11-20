@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState} from 'react'
 import MapView from './components/MapView'
+import { DogIcon, MapTabIcon, PassportTabIcon, RecordsTabIcon } from './components/icons'
 import { PassportTab, RecordsTab} from './components/Tabs'
 import {
 distM,
@@ -500,43 +501,43 @@ const replayPoints = replay
 const replayPolygon = replayPoints.length >= 3 ? pointsToPolygon(replayPoints) : null
 
 return (
-<div className="mx-auto flex h-[100dvh] w-full max-w-[520px] flex-col bg-[#0A0A0A] text-white">
+<div className="mx-auto flex h-[100dvh] w-full max-w-[520px] flex-col bg-[#F2F2EF] text-neutral-900">
 {/* 顶部悬浮状态栏 */}
-<header className="safe-top shrink-0 border-b border-neutral-800/80 bg-[#0A0A0A]/95 px-4 pb-3 pt-3">
+<header className="safe-top shrink-0 border-b border-neutral-200 bg-white/95 px-4 pb-3 pt-3">
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
-<span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E5FF00] text-xl">🐶</span>
+<span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E5FF00]"><DogIcon className="h-7 w-7" /></span>
 <div>
 <h1 className="text-lg font-black leading-5">小狗快跑</h1>
-<p className="text-[11px] leading-4 text-neutral-400">跑步圈地 · 个人自玩版</p>
+<p className="text-[11px] leading-4 text-neutral-500">跑步圈地 · 个人自玩版</p>
 </div>
 </div>
 <button
 onClick={() => setCenterSignal((n) => n + 1)}
-className="rounded-full bg-[#161618] px-3 py-2 text-xs font-bold ring-1 ring-neutral-700 active:scale-95"
+className="rounded-full bg-white px-3 py-2 text-xs font-bold ring-1 ring-neutral-200 active:scale-95"
 >
 ◎ 回到我这
 </button>
 </div>
 <div className="mt-3 grid grid-cols-3 gap-2">
-<div className="rounded-2xl bg-[#161618] px-3 py-2 text-center">
-<div className="text-sm font-black text-[#E5FF00]">{formatArea(myArea)}</div>
-<div className="text-[11px] text-neutral-400">累计占领面积</div>
+<div className="rounded-2xl bg-white px-3 py-2 text-center">
+<div className="text-sm font-black text-[#4D7C0F]">{formatArea(myArea)}</div>
+<div className="text-[11px] text-neutral-500">累计占领面积</div>
 </div>
-<div className="rounded-2xl bg-[#161618] px-3 py-2 text-center">
+<div className="rounded-2xl bg-white px-3 py-2 text-center">
 <div className="text-sm font-black">{formatDistance(totalDist)}</div>
-<div className="text-[11px] text-neutral-400">累计里程</div>
+<div className="text-[11px] text-neutral-500">累计里程</div>
 </div>
-<div className="rounded-2xl bg-[#161618] px-3 py-2 text-center">
+<div className="rounded-2xl bg-white px-3 py-2 text-center">
 <div className="text-sm font-black">{game.beats} 次</div>
-<div className="text-[11px] text-neutral-400">击败 AI 对手</div>
+<div className="text-[11px] text-neutral-500">击败 AI 对手</div>
 </div>
 </div>
 </header>
 
 {/* 红色战报横幅 */}
 {lastAttack && (
-<div className="shrink-0 bg-red-600 px-4 py-2.5 text-sm font-bold leading-6">
+<div className="shrink-0 bg-red-600 px-4 py-2.5 text-sm font-bold leading-6 text-neutral-900">
 <div className="flex items-start justify-between gap-2">
 <span>⚠️ {lastAttack.text}</span>
 <button onClick={() => setLastAttack(null)} className="shrink-0 rounded-full bg-black/30 px-2 py-0.5 text-xs">
@@ -574,7 +575,7 @@ if (!next && running && runSource === 'mock') cancelRun()
 showToast(next? '模拟测试已开启：在地图上点一点就能跑，不用出门': '模拟测试已关闭')
 }}
 className={`flex items-center gap-2 rounded-full px-3 py-2 text-xs font-bold shadow-lg active:scale-95 ${
-mockMode? 'bg-[#E5FF00] text-black': 'bg-[#161618]/90 text-white ring-1 ring-neutral-600 backdrop-blur'
+mockMode? 'bg-[#E5FF00] text-black': 'bg-white/90 text-neutral-900 ring-1 ring-neutral-300 backdrop-blur'
 }`}
 >
 <span className={`inline-block h-2.5 w-2.5 rounded-full ${mockMode? 'bg-black': 'bg-neutral-500'}`} />
@@ -588,7 +589,7 @@ pointsRef.current = prev
 setPoints(prev)
 }}
 disabled={points.length === 0}
-className="rounded-full bg-[#161618]/90 px-3 py-1.5 text-xs font-bold ring-1 ring-neutral-600 backdrop-blur disabled:opacity-40"
+className="rounded-full bg-white/90 px-3 py-1.5 text-xs font-bold ring-1 ring-neutral-300 backdrop-blur disabled:opacity-40"
 >
 ↩ 撤销上一点
 </button>
@@ -598,16 +599,16 @@ className="rounded-full bg-[#161618]/90 px-3 py-1.5 text-xs font-bold ring-1 rin
 
 {/* 轨迹回放控制条 */}
 {replay && (
-<div className="shrink-0 border-t border-neutral-800 bg-[#0A0A0A] px-4 pb-2 pt-2.5">
+<div className="shrink-0 border-t border-neutral-200 bg-white px-4 pb-2 pt-2.5">
 <div className="flex items-center justify-between text-xs">
-<span className="font-bold text-[#E5FF00]">
+<span className="font-bold text-[#4D7C0F]">
 ▶ 回放中 · 10 倍速 · 圈地 {formatArea(replay.record.areaM2)}
 </span>
-<span className="text-neutral-400">
+<span className="text-neutral-500">
 {formatDuration(Math.round(replay.progress * replay.record.durationSec))} / {formatDuration(replay.record.durationSec)}
 </span>
 </div>
-<div className="mt-2 h-2 overflow-hidden rounded-full bg-[#161618]">
+<div className="mt-2 h-2 overflow-hidden rounded-full bg-white">
 <div className="h-full rounded-full bg-[#E5FF00] transition-[width] duration-100" style={{ width: `${Math.round(replay.progress * 100)}%` }} />
 </div>
 <div className="mt-2 flex gap-2">
@@ -629,25 +630,25 @@ onClick={() => {
 setReplay({ record: replay.record, progress: 0 })
 setReplayPaused(false)
 }}
-className="h-10 rounded-xl bg-[#161618] px-4 text-sm font-bold ring-1 ring-neutral-700 active:scale-95"
+className="h-10 rounded-xl bg-white px-4 text-sm font-bold ring-1 ring-neutral-200 active:scale-95"
 >
 ↻ 从头播
 </button>
 <button
 onClick={() => setReplay(null)}
-className="h-10 rounded-xl bg-[#161618] px-4 text-sm font-bold text-neutral-300 ring-1 ring-neutral-700 active:scale-95"
+className="h-10 rounded-xl bg-white px-4 text-sm font-bold text-neutral-600 ring-1 ring-neutral-200 active:scale-95"
 >
 ✕ 关闭
 </button>
 </div>
 {replay.progress >= 1 && (
-<p className="mt-2 text-center text-xs font-bold text-[#E5FF00]">回放完成：领地已完整重现 🎉</p>
+<p className="mt-2 text-center text-xs font-bold text-[#4D7C0F]">回放完成：领地已完整重现 🎉</p>
 )}
 </div>
 )}
 
 {/* 跑步面板 */}
-<div className="safe-bottom shrink-0 border-t border-neutral-800 bg-[#0A0A0A] px-4 pb-3 pt-3">
+<div className="safe-bottom shrink-0 border-t border-neutral-200 bg-white px-4 pb-3 pt-3">
 {!running? (
 <>
 <button
@@ -660,13 +661,13 @@ className="h-14 w-full rounded-2xl bg-[#E5FF00] text-lg font-black text-black sh
 <button
 onClick={advanceDay}
 disabled={myArea <= 0}
-className="flex-1 rounded-xl bg-[#161618] py-2.5 text-xs font-bold text-[#E5FF00] ring-1 ring-[#E5FF00]/40 disabled:opacity-40 active:scale-95"
+className="flex-1 rounded-xl bg-[#E5FF00] py-2.5 text-xs font-bold text-black disabled:opacity-40 active:scale-95"
 >
 ⏭ 推进一天 / 模拟对手行动
 </button>
 <button
 onClick={() => setTab('records')}
-className="flex-1 rounded-xl bg-[#161618] py-2.5 text-xs font-bold ring-1 ring-neutral-700 active:scale-95"
+className="flex-1 rounded-xl bg-white py-2.5 text-xs font-bold ring-1 ring-neutral-200 active:scale-95"
 >
 📋 看看战报
 </button>
@@ -680,17 +681,17 @@ className="flex-1 rounded-xl bg-[#161618] py-2.5 text-xs font-bold ring-1 ring-n
 ): (
 <>
 <div className="grid grid-cols-4 gap-2 text-center">
-<div className="rounded-2xl bg-[#161618] px-1 py-2"><div className="text-sm font-black">{formatDuration(elapsed)}</div><div className="text-[10px] text-neutral-500">用时</div></div>
-<div className="rounded-2xl bg-[#161618] px-1 py-2"><div className="text-sm font-black">{formatDistance(distanceM)}</div><div className="text-[10px] text-neutral-500">距离</div></div>
-<div className="rounded-2xl bg-[#161618] px-1 py-2"><div className="text-sm font-black">{formatPace(pace)}</div><div className="text-[10px] text-neutral-500">实时配速</div></div>
-<div className="rounded-2xl bg-[#161618] px-1 py-2"><div className="text-sm font-black text-[#E5FF00]">{formatArea(estArea)}</div><div className="text-[10px] text-neutral-500">预计围成面积</div></div>
+<div className="rounded-2xl bg-white px-1 py-2"><div className="text-sm font-black">{formatDuration(elapsed)}</div><div className="text-[10px] text-neutral-500">用时</div></div>
+<div className="rounded-2xl bg-white px-1 py-2"><div className="text-sm font-black">{formatDistance(distanceM)}</div><div className="text-[10px] text-neutral-500">距离</div></div>
+<div className="rounded-2xl bg-white px-1 py-2"><div className="text-sm font-black">{formatPace(pace)}</div><div className="text-[10px] text-neutral-500">实时配速</div></div>
+<div className="rounded-2xl bg-white px-1 py-2"><div className="text-sm font-black text-[#4D7C0F]">{formatArea(estArea)}</div><div className="text-[10px] text-neutral-500">预计围成面积</div></div>
 </div>
 {loopReady? (
 <div className="mt-2 animate-pulse rounded-2xl bg-[#E5FF00] px-3 py-2.5 text-center text-sm font-black text-black">
 ✅ 已形成闭环，点击结束即可占领领地！
 </div>
 ): (
-<p className="mt-2 text-center text-xs text-neutral-400">
+<p className="mt-2 text-center text-xs text-neutral-500">
 {distanceM < 200
 ? `再跑 ${Math.max(0, Math.round(200 - distanceM))} 米满 200 米，`
 : ''}
@@ -704,7 +705,7 @@ className="h-12 flex-1 rounded-2xl bg-[#E5FF00] text-base font-black text-black 
 >
 {runSource === 'mock'? '完成模拟跑 · 占领': '结束并占领领地'}
 </button>
-<button onClick={cancelRun} className="h-12 rounded-2xl bg-[#161618] px-4 text-sm font-bold text-neutral-300 ring-1 ring-neutral-700 active:scale-95">
+<button onClick={cancelRun} className="h-12 rounded-2xl bg-white px-4 text-sm font-bold text-neutral-600 ring-1 ring-neutral-200 active:scale-95">
 取消
 </button>
 </div>
@@ -720,23 +721,23 @@ className="h-12 flex-1 rounded-2xl bg-[#E5FF00] text-base font-black text-black 
 </main>
 
 {/* 底部 3 Tab */}
-<nav className="safe-bottom shrink-0 border-t border-neutral-800 bg-[#0A0A0A] px-4 pb-2 pt-2">
+<nav className="safe-bottom shrink-0 border-t border-neutral-200 bg-white px-4 pb-2 pt-2">
 <div className="grid grid-cols-3 gap-2">
 {(
 [
-{ id: 'map', label: '地图', icon: '🗺️'},
-{ id: 'records', label: '战报记录', icon: '📋'},
-{ id: 'passport', label: '我的护照', icon: '🛂'},
+{ id: 'map', label: '地图', Icon: MapTabIcon },
+{ id: 'records', label: '战报记录', Icon: RecordsTabIcon },
+{ id: 'passport', label: '我的护照', Icon: PassportTabIcon },
 ] as const
 ).map((t) => (
 <button
 key={t.id}
 onClick={() => setTab(t.id)}
-className={`rounded-2xl py-2 text-sm font-bold active:scale-95 ${
-tab === t.id? 'bg-[#E5FF00] text-black': 'bg-[#161618] text-neutral-300'
+className={`flex items-center justify-center gap-1.5 rounded-2xl py-2 text-sm font-bold active:scale-95 ${
+tab === t.id? 'bg-[#E5FF00] text-black': 'bg-white text-neutral-600'
 }`}
 >
-{t.icon} {t.label}
+<t.Icon className="h-5 w-5" /> {t.label}
 </button>
 ))}
 </div>
@@ -751,18 +752,18 @@ tab === t.id? 'bg-[#E5FF00] text-black': 'bg-[#161618] text-neutral-300'
 
 {/* 结算弹窗 */}
 {settle && (
-<div className="fixed inset-0 z-[900] flex items-end justify-center bg-black/70 p-4" onClick={() => setSettle(null)}>
-<div className="w-full max-w-[480px] rounded-3xl bg-[#161618] p-5" onClick={(e) => e.stopPropagation()}>
+<div className="fixed inset-0 z-[900] flex items-end justify-center bg-black/40 p-4" onClick={() => setSettle(null)}>
+<div className="w-full max-w-[480px] rounded-3xl bg-white p-5" onClick={(e) => e.stopPropagation()}>
 <div className="text-center text-4xl">🐶🎉</div>
 <h2 className="mt-2 text-center text-xl font-black">圈地成功！</h2>
 <div className="mt-4 grid grid-cols-2 gap-2 text-center">
-<div className="rounded-2xl bg-[#0A0A0A] p-3"><div className="text-lg font-black text-[#E5FF00]">{formatArea(settle.areaM2)}</div><div className="text-xs text-neutral-400">新占领面积</div></div>
-<div className="rounded-2xl bg-[#0A0A0A] p-3"><div className="text-lg font-black">{formatDistance(settle.distanceM)}</div><div className="text-xs text-neutral-400">跑步距离</div></div>
-<div className="rounded-2xl bg-[#0A0A0A] p-3"><div className="text-lg font-black">{formatDuration(settle.durationSec)}</div><div className="text-xs text-neutral-400">用时</div></div>
-<div className="rounded-2xl bg-[#0A0A0A] p-3"><div className="text-lg font-black">{settle.cutM2 > 0? formatArea(settle.cutM2): '—'}</div><div className="text-xs text-neutral-400">重叠裁切</div></div>
+<div className="rounded-2xl bg-neutral-100 p-3"><div className="text-lg font-black text-[#4D7C0F]">{formatArea(settle.areaM2)}</div><div className="text-xs text-neutral-500">新占领面积</div></div>
+<div className="rounded-2xl bg-neutral-100 p-3"><div className="text-lg font-black">{formatDistance(settle.distanceM)}</div><div className="text-xs text-neutral-500">跑步距离</div></div>
+<div className="rounded-2xl bg-neutral-100 p-3"><div className="text-lg font-black">{formatDuration(settle.durationSec)}</div><div className="text-xs text-neutral-500">用时</div></div>
+<div className="rounded-2xl bg-neutral-100 p-3"><div className="text-lg font-black">{settle.cutM2 > 0? formatArea(settle.cutM2): '—'}</div><div className="text-xs text-neutral-500">重叠裁切</div></div>
 </div>
 {settle.reclaimM2 > 0 && (
-<p className="mt-3 rounded-2xl bg-[#E5FF00]/10 px-3 py-2 text-center text-sm font-bold text-[#E5FF00]">
+<p className="mt-3 rounded-2xl bg-lime-50 px-3 py-2 text-center text-sm font-bold text-[#4D7C0F]">
 ⚔️ 还从 AI 手里夺回了 {formatArea(settle.reclaimM2)}
 </p>
 )}
@@ -776,7 +777,7 @@ setSettle(null)
 advanceDay()
 }}
 disabled={myArea <= 0}
-className="h-12 flex-1 rounded-2xl bg-[#161618] font-bold ring-1 ring-[#E5FF00]/50 disabled:opacity-40 active:scale-[0.98]"
+className="h-12 flex-1 rounded-2xl bg-white font-bold ring-1 ring-neutral-300 disabled:opacity-40 active:scale-[0.98]"
 >
 ⏭ 推进一天
 </button>
