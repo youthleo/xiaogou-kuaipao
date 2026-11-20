@@ -24,7 +24,7 @@ interface Props {
   replayFitSignal?: number
 }
 
-const TILE_URL = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+const TILE_URL = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}'
 
 function dogIcon(color: string): L.DivIcon {
   return L.divIcon({
@@ -68,7 +68,8 @@ export default function MapView({
     })
     L.tileLayer(TILE_URL, {
       maxZoom: 20,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+      maxNativeZoom: 16, // Esri 深灰底图原生只到 16 级，更高级别用 16 级瓦片放大
+      attribution: '&copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors, and the GIS user community',
     }).addTo(map)
     terrLayerRef.current = L.layerGroup().addTo(map)
     liveLayerRef.current = L.layerGroup().addTo(map)
