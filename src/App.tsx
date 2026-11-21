@@ -32,6 +32,17 @@ totalDistanceM as totalGameDistanceM,
 totalMyAreaM2 as totalMyAreaM2Store,
 } from './lib/store'
 import type { BattleReport, GameState, RunRecord, Territory} from './lib/store'
+import {
+isDriveLinked,
+loginDrive,
+logoutDrive,
+noteLocalChange,
+noteRemoteApplied,
+silentSyncOnLoad,
+syncNow,
+useDriveSync,
+} from './lib/driveSync'
+import type { SyncResult } from './lib/driveSync'
 
 type Tab = 'map' | 'records' | 'passport'
 
@@ -80,15 +91,75 @@ pointsRef.current = points
 const gameRef = useRef(game)
 gameRef.current = game
 
-// 自动持久化：任何记录 / 领地 / AI 数据变化都写 localStorage
+// 自动持久化：任何记录 / 领地 / AI 数据变化都写 localStorage，
+// 变化后（防抖 5 秒）自动同步到 Google Drive（已登录时）
+const firstSaveRef = useRef(true)
+const skipNextDriveUploadRef = useRef(false)
+const driveInfo = useDriveSync()
 useEffect(() => {
 saveState(game)
+if (firstSaveRef.current) {
+// 首屏挂载这次只写本地，不记“本地变了”，否则会误判本地比云端新
+firstSaveRef.current = false
+return
+}
+if (skipNextDriveUploadRef.current) {
+// 刚用云端存档替换了本地：这次只写本地，不再往云端传
+skipNextDriveUploadRef.current = false
+return
+}
+noteLocalChange(game)
 }, [game])
 
 const showToast = useCallback((msg: string) => {
 setToast(msg)
 window.setTimeout(() => setToast((t) => (t === msg? null: t)), 3500)
 }, [])
+
+// 打开页面时，若之前连过 Drive，后台静默同步一次（云端新就下载恢复）
+const driveAutoSyncTriedRef = useRef(false)
+useEffect(() => {
+if (driveAutoSyncTriedRef.current) return
+driveAutoSyncTriedRef.current = true
+if (!isDriveLinked() || !navigator.onLine) return
+void silentSyncOnLoad(gameRef.current).then((r) => {
+if (r.action === 'downloaded') {
+skipNextDriveUploadRef.current = true
+setGame(r.state)
+noteRemoteApplied(r.savedAt)
+}
+})
+}, [])
+
+// Drive 同步结果处理：云端下载的覆盖本地，其余只提示
+const handleDriveResult = useCallback(
+(r: SyncResult, actionLabel: string) => {
+if (r.action === 'downloaded') {
+skipNextDriveUploadRef.current = true
+setGame(r.state)
+noteRemoteApplied(r.savedAt)
+showToast('已从 Google Drive 恢复最新存档')
+return
+}
+if (r.action === 'uploaded') showToast('已同步到 Google Drive')
+else if (r.action === 'up-to-date') showToast('Google Drive 已是最新')
+else showToast(`${actionLabel}失败，请检查网络后重试`)
+},
+[showToast],
+)
+
+const onDriveLogin = useCallback(() => {
+void loginDrive(gameRef.current).then((r) => handleDriveResult(r, '登录'))
+}, [handleDriveResult])
+
+const onDriveLogout = useCallback(() => {
+logoutDrive()
+showToast('已退出 Google Drive 同步，数据仍保留在本机')
+}, [showToast])
+
+const onDriveSyncNow = useCallback(() => {
+void syncNow(gameRef.current).then((r) => handleDriveResult(r, '同步'))
+}, [handleDriveResult])
 
 // 跑步计时
 useEffect(() => {
@@ -717,7 +788,18 @@ className="h-12 flex-1 rounded-2xl bg-[#E5FF00] text-base font-black text-black 
 {tab === 'records' && (
 <RecordsTab state={game} onAdvanceDay={advanceDay} onReplay={startReplay} replayingId={replay?.record.id ?? null} />
 )}
-{tab === 'passport' && <PassportTab state={game} onExport={onExport} onImportFile={onImportFile} onClear={onClear} />}
+{tab === 'passport' && (
+<PassportTab
+state={game}
+onExport={onExport}
+onImportFile={onImportFile}
+onClear={onClear}
+driveInfo={driveInfo}
+onDriveLogin={onDriveLogin}
+onDriveLogout={onDriveLogout}
+onDriveSyncNow={onDriveSyncNow}
+/>
+)}
 </main>
 
 {/* 底部 3 Tab */}
