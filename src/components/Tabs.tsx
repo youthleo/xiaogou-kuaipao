@@ -3,6 +3,8 @@ import type { GameState, RunRecord } from '../lib/store'
 import { formatArea, formatDistance, formatDuration, formatPace } from '../lib/geo'
 import { exportFileName, levelFor, totalDistanceM, totalMyAreaM2 } from '../lib/store'
 import PassportPoster from './PassportPoster'
+import DriveSyncCard from './DriveSyncCard'
+import type { DriveSyncInfo } from '../lib/driveSync'
 import { DogIcon } from './icons'
 
 function fmtDate(ts: number): string {
@@ -107,11 +109,19 @@ export function PassportTab({
   onExport,
   onImportFile,
   onClear,
+  driveInfo,
+  onDriveLogin,
+  onDriveLogout,
+  onDriveSyncNow,
 }: {
   state: GameState
   onExport: () => void
   onImportFile: (f: File) => void
   onClear: () => void
+  driveInfo: DriveSyncInfo
+  onDriveLogin: () => void
+  onDriveLogout: () => void
+  onDriveSyncNow: () => void
 }) {
   const fileRef = useRef<HTMLInputElement>(null)
   const myArea = totalMyAreaM2(state)
@@ -124,7 +134,7 @@ export function PassportTab({
       <div className="rounded-3xl bg-white p-5 text-center ring-1 ring-neutral-200">
         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#E5FF00]"><DogIcon className="h-16 w-16" /></div>
         <h2 className="mt-3 text-xl font-black">小狗快跑 · 我的护照</h2>
-        <p className="mt-1 text-sm text-neutral-500">个人自玩版 · 数据只存在这台手机的浏览器里</p>
+        <p className="mt-1 text-sm text-neutral-500">个人自玩版 · 本机保存，也可同步到 Google Drive</p>
         <div className="mt-3 inline-block rounded-full bg-[#E5FF00] px-4 py-1 text-sm font-black text-black">{level.title}</div>
         <p className="mt-2 text-xs text-neutral-500">{level.next}</p>
       </div>
@@ -162,6 +172,12 @@ export function PassportTab({
 
       <h3 className="mb-2 mt-6 text-xs font-bold tracking-wider text-neutral-500">数据备份</h3>
       <div className="space-y-2">
+        <DriveSyncCard
+          info={driveInfo}
+          onLogin={onDriveLogin}
+          onLogout={onDriveLogout}
+          onSyncNow={onDriveSyncNow}
+        />
         <button onClick={onExport} className="w-full rounded-2xl bg-[#E5FF00] py-3 text-sm font-black text-black active:scale-[0.98]">
           导出 JSON 备份（{exportFileName()}）
         </button>
@@ -191,9 +207,9 @@ export function PassportTab({
           清空全部数据
         </button>
         <p className="text-center text-xs leading-5 text-neutral-500">
-          所有数据自动保存在本机 localStorage，无需账号、无需付费 Key。
+          所有数据自动保存在本机 localStorage；登录 Google Drive 后还会自动同步到云端。
           <br />
-          换手机 / 清浏览器数据前，先导出一份 JSON。
+          换手机 / 清浏览器数据前，也可以先导出一份 JSON 兜底。
         </p>
       </div>
 
